@@ -9,13 +9,13 @@ This repository provides a detailed guide on fine-tuning the Flan-T5 model from 
 * [**Further work** ](##Further-work)
 
 ## Introduction
-This project details a step-by-step process for full fine-tuning and Parameter-Efficient Fine-Tuning (PEFT) with prompt instructions. Additionally, it includes further fine-tuning of the Flan-T5 model with customized specific prompts for a custom-specific summarization task.
+This project details a step-by-step process for full fine-tuning and Parameter-Efficient Fine-Tuning (PEFT), Low-Rank Adaptation (LoRA) prompt instructions (which is NOT THE SAME as prompt engineering!). Additionally, it includes further fine-tuning of the Flan-T5 model with customized specific prompts for a custom-specific summarization task.
 
-Imagine a scenario where, despite performing in-context learning with zero-shot, one-shot, or even few-shot techniques, the Language Model (LLM) performance does not meet your specific task requirements. In such cases, full fine-tuning could be a potential solution, but do you have the necessary compute resources? If yes, that's fantastic! However, also consider multiple-task fine-tuning to address the challenge of Catastrophic Forgetting. Alternatively, a computationally cost-effective approach to consider is PEFT. PEFT preserves the weights of the original LLM and trains only a small number of task-specific adapter layers and parameters, thereby utilizing fewer storage and compute resources. While there may be a slight trade-off in performance, considering the reduction in compute resources required, it could be a worthwhile consideration.
+Imagine a scenario where, despite performing in-context learning with zero-shot, one-shot, or even few-shot techniques, the Language Model (LLM) performance does not meet your specific task requirements. In such cases, full fine-tuning could be a potential solution, but do you have the necessary compute resources? If yes, that's fantastic! However, also consider multiple-task fine-tuning to address the challenge of Catastrophic Forgetting. Alternatively, a computationally cost-effective approach to consider is PEFT. PEFT preserves the weights of the original LLM and trains only a small number of task-specific adapter layers and parameters, thereby utilizing fewer storage and compute resources. While there may be a slight trade-off in performance, considering the reduction in compute resources required, it could be a worthwhile consideration. After fine-tuning for a specific task, use case, or tenant with LoRA, the result is that the original LLM remains unchanged and a newly-trained “LoRA adapter” emerges. This LoRA adapter is much, much smaller than the original LLM - on the order of a single-digit % of the original LLM size (MBs vs GBs).
 
 The base model used in this project is the FLAN-T5 model. The FLAN-T5 model provides a high quality instruction model and can summarize text out of the box. The dataset is the DialogSum dataset from HuggingFace.
 
-To improve inferences, full fine-tuning approach was performed and the results evaluated with ROUGE Metrics. Furthermore, PEFT fine-tuning was performed and evaluation of results using the ROUGE metrics too. Comparing both results shows the benefit of PEFT outweighing the slightly-lower performance metrics.  .
+To improve inferences, full fine-tuning approach was performed and the results evaluated with ROUGE Metrics. ROUGE Metrics may not perfect, but it does indicate the overall increase in summarization effectiveness that we have accomplished by fine-tuning. Furthermore, PEFT fine-tuning was performed and evaluation of results using the ROUGE metrics too. Comparing both results shows the benefit of PEFT outweighing the slightly-lower performance metrics.  .
 
 ## Getting Started
 The following steps will help you get started:
@@ -31,6 +31,7 @@ This projects was originally carried out in an AWS Sagemaker notebook. The Insta
 https://colab.research.google.com/drive/1YRQlMInx7nfsf2qsBLDw9lx33a7FetnB#scrollTo=Zipuq1NHtqDq
 3. Codes and comments are available to explain the different steps:
 
+* Setting up Kernel, Load Required Dependencies, Dataset and LLM
 * Importing packages
 * Downloading dataset
 * Creating and splitting the dataset 
@@ -42,6 +43,20 @@ https://colab.research.google.com/drive/1YRQlMInx7nfsf2qsBLDw9lx33a7FetnB#scroll
 * Fine tuning
 * Evaluation and validation tests
 * Inference
+* 1- Set up Kernel, Load Required Dependencies, Dataset and LLM
+    * 1.1 - Set up Kernel and Required Dependencies
+      1.2 - Load Dataset and LLM
+      1.3 - Test the Model with Zero Shot Inferencing
+      2 - Perform Full Fine-Tuning
+* 2.1 - Preprocess the Dialog-Summary Dataset
+      2.2 - Fine-Tune the Model with the Preprocessed Dataset
+      2.3 - Evaluate the Model Qualitatively (Human Evaluation)
+      2.4 - Evaluate the Model Quantitatively (with ROUGE Metric)
+* 3 - Perform Parameter Efficient Fine-Tuning (PEFT)
+      3.1 - Setup the PEFT/LoRA model for Fine-Tuning
+      3.2 - Train PEFT Adapter
+      3.3 - Evaluate the Model Qualitatively (Human Evaluation)
+      3.4 - Evaluate the Model Quantitatively (with ROUGE Metric)
 
 ## Methodology and Results
 ### Dataset
