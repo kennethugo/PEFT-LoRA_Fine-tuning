@@ -1,5 +1,5 @@
 # PEFT-LoRA_Fine-tuning of Flan-T5 model
-This repository shows the step-by-step process of Fine-tuning using PEFT (Parameter Efficient Fine-Tuning) with LoRA for improving the Dialogue summarization capacity of the Flan-T5 model. 
+This repository provides a detailed guide on fine-tuning the Flan-T5 model using Parameter Efficient Fine-Tuning (PEFT) with LoRA to get an improved Dialogue summarization capacity of the new model. 
 
 # Table of Content
 * [**Introduction**](##Introduction)
