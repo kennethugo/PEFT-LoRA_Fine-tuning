@@ -21,6 +21,9 @@ To improve inferences, full fine-tuning approach was performed and the results e
 The following steps will help you get started:
 
 This projects was originally carried out in an AWS Sagemaker notebook. The Instance type from SageMaker Comprises of Eight vCPU, 32 gigabyte. This is the AWS instance type from SageMaker, ml.m5.2xl
+![https://github.com/kennethugo/PEFT-LoRA_Fine-tuning/blob/main/Images/instance_type.png]([https://github.com/username/repository/blob/branch/folder/image.png](https://github.com/kennethugo/PEFT-LoRA_Fine-tuning/blob/main/Images/instance_type.png))
+
+https://github.com/kennethugo/PEFT-LoRA_Fine-tuning/blob/main/Images/instance_type.png
 
 
 1. Open the notebook in Goggle colab
