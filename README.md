@@ -44,8 +44,8 @@ https://colab.research.google.com/drive/1YRQlMInx7nfsf2qsBLDw9lx33a7FetnB#scroll
 * Evaluation and validation tests
 * Inference
 * 1- Set up Kernel, Load Required Dependencies, Dataset and LLM
-    * 1.1 - Set up Kernel and Required Dependencies
-      1.2 - Load Dataset and LLM
+    ** 1.1 - Set up Kernel and Required Dependencies
+      **1.2 - Load Dataset and LLM
       1.3 - Test the Model with Zero Shot Inferencing
       2 - Perform Full Fine-Tuning
 * 2.1 - Preprocess the Dialog-Summary Dataset
