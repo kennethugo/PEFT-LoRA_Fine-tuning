@@ -31,37 +31,42 @@ This projects was originally carried out in an AWS Sagemaker notebook. The Insta
 https://colab.research.google.com/drive/1YRQlMInx7nfsf2qsBLDw9lx33a7FetnB#scrollTo=Zipuq1NHtqDq
 3. Codes and comments are available to explain the different steps:
 
-* Setting up Kernel, Load Required Dependencies, Dataset and LLM
-* Importing packages
-* Downloading dataset
-* Creating and splitting the dataset 
-* Calculating class weights
-* Data Preprocessing and Augmentation 
-* Metrics
-* Model Building
-* Model training
-* Fine tuning
-* Evaluation and validation tests
-* Inference
 * 1- Set up Kernel, Load Required Dependencies, Dataset and LLM
-** 1.1 - Set up Kernel and Required Dependencies
-      **1.2 - Load Dataset and LLM
-      1.3 - Test the Model with Zero Shot Inferencing
-      2 - Perform Full Fine-Tuning
-* 2.1 - Preprocess the Dialog-Summary Dataset
-      2.2 - Fine-Tune the Model with the Preprocessed Dataset
-      2.3 - Evaluate the Model Qualitatively (Human Evaluation)
-      2.4 - Evaluate the Model Quantitatively (with ROUGE Metric)
+  
+       1.1 - Set up Kernel and Required Dependencies
+  
+       1.2 - Load Dataset and LLM
+
+       1.3 - Test the Model with Zero Shot Inferencing
+
+* 2 - Perform Full Fine-Tuning
+  
+       2.1 - Preprocess the Dialog-Summary Dataset
+
+       2.2 - Fine-Tune the Model with the Preprocessed Dataset
+
+       2.3 - Evaluate the Model Qualitatively (Human Evaluation)
+
+       2.4 - Evaluate the Model Quantitatively (with ROUGE Metric)
+  
 * 3 - Perform Parameter Efficient Fine-Tuning (PEFT)
       3.1 - Setup the PEFT/LoRA model for Fine-Tuning
+  
       3.2 - Train PEFT Adapter
+  
       3.3 - Evaluate the Model Qualitatively (Human Evaluation)
+  
       3.4 - Evaluate the Model Quantitatively (with ROUGE Metric)
 
 ## Methodology and Results
 ### Dataset
 
-The Road and Field Binary Classification Project involve the categorization of images into two classes: roads and fields. The dataset used for this project consists of a diverse collection of road and field images provided by Trimble / Bilberry. The dataset show 45 images of fields and 108 images of road. 
+The dataset used for this proj ect is DialogSum from HuggingFace. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 (Plus 100 holdout data for topic generation) dialogues with corresponding manually labeled summaries and topics. The language is english. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 dialogues (+1000 tests) split into train (12460), testb(1500) and validation (500). Data field include; 
+*dialogue: text of dialogue.
+*summary: human written summary of the dialogue.
+*topic: human written topic/one liner of the dialogue.
+*id: unique file id of an example.
+
 
 ### Data Preprocessing
 
