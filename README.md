@@ -15,8 +15,6 @@ Imagine a scenario where, despite performing in-context learning with zero-shot,
 
 The base model used in this project is the FLAN-T5 model. The FLAN-T5 model provides a high quality instruction model and can summarize text out of the box. The dataset is the DialogSum dataset from HuggingFace.
 
-To improve inferences, full fine-tuning approach was performed and the results evaluated with ROUGE Metrics. ROUGE Metrics may not perfect, but it does indicate the overall increase in summarization effectiveness that we have accomplished by fine-tuning. Furthermore, PEFT fine-tuning was performed and evaluation of results using the ROUGE metrics too. Comparing both results shows the benefit of PEFT outweighing the slightly-lower performance metrics.  .
-
 ## Getting Started
 The following steps will help you get started:
 
@@ -61,7 +59,7 @@ https://colab.research.google.com/drive/1YRQlMInx7nfsf2qsBLDw9lx33a7FetnB#scroll
 ## Methodology and Results
 ### Dataset
 
-The dataset used for this proj ect is DialogSum from HuggingFace. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 (Plus 100 holdout data for topic generation) dialogues with corresponding manually labeled summaries and topics. The language is english. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 dialogues (+1000 tests) split into train (12460), testb(1500) and validation (500). Data field include; 
+The dataset used for this project is the [DialogSum Dataset](https://huggingface.co/datasets/knkarthick/dialogsum) from HuggingFace. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 (Plus 100 holdout data for topic generation) dialogues with corresponding manually labeled summaries and topics. The language is english. DialogSum is a large-scale dialogue summarization dataset, consisting of 13,460 dialogues (+1000 tests) split into train (12460), testb(1500) and validation (500). Data field include; 
 *dialogue: text of dialogue.
 *summary: human written summary of the dialogue.
 *topic: human written topic/one liner of the dialogue.
@@ -70,31 +68,37 @@ The dataset used for this proj ect is DialogSum from HuggingFace. DialogSum is a
 
 ### Data Preprocessing
 
-Prior to training the classification model, extensive data preprocessing was performed. First of all, in solving the problem of data imbalance, I considered techniques like oversampling and class weighting in addition to data augmentation. Due to the small number of the dataset, applying data augmentation techniques to artificially increase the size and diversity of the training dataset was inevitable. So I used common augmentations like random rotations, flips, zooms to help augment and improve diversity and model's robustness. The images were resized to a consistent resolution, maintaining same size of (244, 244) mobileNETv2 was preprocessed with. 
+Prior to full fine-tuning the dataset was converted to the dialog-summary (prompt-response) pairs into explicit instructions for the LLM. An instruction was Prepended to the start of the dialog with Summarize the following conversation and to the start of the summary with Summary as follows:
 
-After oversampling the dataset using the Borderline SMOTE method, both classes had equal number of examples but going through the oversampled images, I realized the qualities were poor and there may be no new information for the model to learn and this can further increase over fitting. This left me with the option of class weighting. Class weighting will assign different weights to classes during training, giving higher weight to the minority class, which effectively increases its importance during gradient updates. So I used the class weighting technique by calculating class weight of the two classes and applied this during training. This reduced over fitting and bias towards the majority Class and also reduce poor generalization to the minority class.. The best solution to handle the data imbalance could have been to generate or collect more data to add to the minority field class, but It was not stated if this option was allowed in this exercise. 
-Going forward, the dataset was split into training and validation sets using the tf.keras image_dataset_from_directory. As best practice, the same preprocessing that was used during training of mobilenetV2 was also applied.  This helps achieve desired result since transfer learning of the mobile will be used.
+Training prompt (dialogue):
 
+Summarize the following conversation.
 
-### Model Architecture
+    Speaker 1: This is his part of the conversation.
+    speaker 2: This is her part of the conversation.
+    
+Summary: 
+Training response (summary):
 
-Transfer learning approach was adopted using the MobileNetV2 architecture, a pre-trained Convolutional neural network (CNN) model. I used MobilenetV2 for transfer learning because of its designed to provide fast and computationally efficient performance, even good for lightweight deep learning tasks. The pre-trained MobileNetV2 was fine-tuned for the binary classification task. To enhance the model's performance, additional layers were appended, including global average pooling, dropout layers were added, and a dense layer. During fine-tuning, more dropout values and dense layers with L2 regularization were experimented with to reduce overfitting and improve models performance on validation datasets.
+Both Speaker 1 and Speaker 2 participated in the conversation.
+Then preprocess the prompt-response dataset into tokens and pull out their input_ids (1 per token)
 
-### Training and Evaluation
+### Training and Evaluation - Full Fine tuning and PEFT LoRA fine-tuning
+The model was trained using the built-in Hugging Face Trainer class (see the documentation [here](https://huggingface.co/docs/transformers/main_classes/trainer)) and passing the preprocessed train dataset with reference to the original model. Other training parameters were found experimentally
 
-The model was trained using a combination of the fine-tuned architecture and the Adam optimizer. A Binary Cross-Entropy loss function was employed, and class weights were utilized to address the class imbalance between roads and fields. The training process was monitored using metrics such as accuracy, precision, recall. Tensorboard was used to visualize the curves and graphs of the various metrics. class weighting was used to assign different weights to different classes during training.  This is to reduce bias toward the Majority class when predicting that majority class. This will also stop the tendency of the model not generalize well to the minority class.
+The model's performance was evaluated on a validation dataset that was distinct from the training data.The ROUGE-1 metrics was used. To improve inferences, full fine-tuning approach was performed and the results evaluated with ROUGE Metrics. ROUGE Metrics may not perfect, but it does indicate the overall increase in summarization effectiveness that we have accomplished by fine-tuning. 
 
-The model's performance was evaluated on a validation dataset that was distinct from the training data. Early stopping was implemented to prevent overfitting, and the best weights were restored to ensure optimal generalization.
+Furthermore, PEFT fine-tuning was performed and evaluation of results using the ROUGE metrics too. PEFT/LoRA model was set up with a new layer/parameter adapter for fine-tuning. Using PEFT/LoRA, you are freezing the underlying LLM and only training the adapter.
 
 ### Results
 
-Considering the size of the overall dataset, the model achieved impressive results in classifying road and field images. Although overfitting was not completely removed, bias towards predicting the majority class (field class) was eliminated using class weighting. Poor generalization of the model to the minority class (the road class) was also reduced; there was no overfittiing to the majority class for a model like this.  Overfitting was generally reduced and controlled during fine-tuning using dropout and l2 regularization. The evaluation metrics showcased the model's effectiveness in distinguishing between the two classes. The precision, recall, and F1-score demonstrated the model's ability to provide reliable predictions.
 
+Performing inference for the sample of the test dataset, with the original model, the  fully fine-tuned model and the PEFT-model, shows huge improvement of PEFT over the original model though not better than the fully fine tuned model. However the training of the PEFT model requires much less computing and memory resources (often just a single GPU). Comparing both results using ROUGE-1 shows the benefit of PEFT outweighing the slightly-lower performance metrics. 
 
 
 ## Conclusion
 
-The Road and Field Binary Classification Project demonstrates the application of transfer learning and advanced computer vision techniques to the task of classifying road and field images. This exercise also provides solution to solve the problems that could be caused by small and imbalance datasets like overfitting and bias toward a majority Class, or poor generalization of the model to the minority class etc. By leveraging a pre-trained model, fine-tuning, and implementing data augmentation and class weighting impressive classification results were achieved. The project's methodology serves as a valuable foundation for future work or similar image classification tasks and can be extended to other domains. There are rooms for Improvement too.
+With PEFT-LoRA fine tuning less compute cost resources can be used to perform specific task fine tuning which in most of the times out performs a base model 
 
 For detailed code implementation and usage instructions, refer to the [**Getting Started**](##Getting-Started) section above.
 
