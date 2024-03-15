@@ -72,15 +72,15 @@ Prior to full fine-tuning the dataset was converted to the dialog-summary (promp
 
 Training prompt (dialogue):
 
-Summarize the following conversation.
+  Summarize the following conversation.
 
     Speaker 1: This is his part of the conversation.
     speaker 2: This is her part of the conversation.
     
-Summary: 
+  Summary: 
 Training response (summary):
 
-Both Speaker 1 and Speaker 2 participated in the conversation.
+    Both Speaker 1 and Speaker 2 participated in the conversation.
 Then preprocess the prompt-response dataset into tokens and pull out their input_ids (1 per token)
 
 ### Training and Evaluation - Full Fine tuning and PEFT LoRA fine-tuning
