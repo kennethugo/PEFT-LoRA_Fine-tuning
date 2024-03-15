@@ -25,7 +25,7 @@ This projects was originally carried out in an AWS Sagemaker notebook. The Insta
 
 
 
-1. Open the notebook in Goggle colab
+1. Open the notebook
 [AWS SageMaker JupyterLab](https://github.com/kennethugo/PEFT-LoRA_Fine-tuning/blob/main/Lab_2_fine_tune_generative_ai_model.ipynb)
 3. Codes and comments are available to explain the different steps:
 
